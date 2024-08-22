@@ -16,7 +16,7 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-/*
+
 async function obtenerUsuariosInfo() {
   onAuthStateChanged(auth, async (user) => {
     const userInfoElement = document.getElementById("userInfo");
@@ -346,7 +346,7 @@ async function obtenerUsuariosInfo() {
   });
 }
 
-*/
+
 
 
 
