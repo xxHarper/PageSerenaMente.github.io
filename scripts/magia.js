@@ -3,13 +3,13 @@ import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/
 import { getFirestore, doc, getDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-firestore.js";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyA0kLe5l_gNuBwhkOOvBr8RO150dHCU31k",
-  authDomain: "serena-mente.firebaseapp.com",
-  projectId: "serena-mente",
-  storageBucket: "serena-mente.appspot.com",
-  messagingSenderId: "183868385167",
-  appId: "1:183868385167:web:442b02f182fc8a28260dfa",
-  measurementId: "G-LVWYEJBRHE"
+    apiKey: "AIzaSyA0kLe5l_gNuBwhkOOvBr8RO150dHCU31k",
+    authDomain: "serena-mente.firebaseapp.com",
+    projectId: "serena-mente",
+    storageBucket: "serena-mente.appspot.com",
+    messagingSenderId: "183868385167",
+    appId: "1:183868385167:web:442b02f182fc8a28260dfa",
+    measurementId: "G-LVWYEJBRHE"
 };
 
 const app = initializeApp(firebaseConfig);
@@ -352,259 +352,280 @@ async function obtenerUsuariosInfo() {
 
 
 function createParagraph(html) {
-  const p = document.createElement("p");
-  p.innerHTML = html;
-  return p;
+    const p = document.createElement("p");
+    p.innerHTML = html;
+    return p;
 }
 
 document.addEventListener("DOMContentLoaded", obtenerUsuariosInfo);
 
 document.addEventListener("DOMContentLoaded", function () {
-  const exportWebUsersButton = document.getElementById("exportUsersPaginaCSVButton");
-  exportWebUsersButton.addEventListener("click", exportWebUsersCSV);
+    const exportWebUsersButton = document.getElementById("exportUsersPaginaCSVButton");
+    exportWebUsersButton.addEventListener("click", exportWebUsersCSV);
 
-  const exportAppUsersButton = document.getElementById("exportUsersAplicacionCSVButton");
-  exportAppUsersButton.addEventListener("click", exportAppUsersCSV);
+    const exportAppUsersButton = document.getElementById("exportUsersAplicacionCSVButton");
+    exportAppUsersButton.addEventListener("click", exportAppUsersCSV);
 
-  const exportAppUsersEvPrevButton = document.getElementById("exportUsersEvPrevRealizadaCSVButton");
-  exportAppUsersEvPrevButton.addEventListener("click", exportAppUsersEvPrevCSV);
+    const exportAppUsersEvPrevButton = document.getElementById("exportUsersEvPrevRealizadaCSVButton");
+    exportAppUsersEvPrevButton.addEventListener("click", exportAppUsersEvPrevCSV);
 
-  const exportAllDataUsersEvPrevButton = document.getElementById("exportAllDataUsersCSVButton");
-  exportAllDataUsersEvPrevButton.addEventListener("click", exportAllDataAsCSV);
+    const exportAllDataUsersEvPrevButton = document.getElementById("exportAllDataUsersCSVButton");
+    exportAllDataUsersEvPrevButton.addEventListener("click", exportAllDataAsCSV);
 
-  const exportEvaluacionPreviaButton = document.getElementById("exportEvaluacionPreviaPaginaCSVButton");
-  exportEvaluacionPreviaButton.addEventListener("click", exportEvaluacionPreviaPaginaCSV);
+    const exportEvaluacionPreviaButton = document.getElementById("exportEvaluacionPreviaPaginaCSVButton");
+    exportEvaluacionPreviaButton.addEventListener("click", exportEvaluacionPreviaPaginaCSV);
 
-  const exportEvaluacionPreviaAplicacionButton = document.getElementById("exportEvaluacionPreviaAplicacionCSVButton");
-  exportEvaluacionPreviaAplicacionButton.addEventListener("click", exportEvaluacionPreviaAplicacionCSV);
+    const exportEvaluacionPreviaAplicacionButton = document.getElementById("exportEvaluacionPreviaAplicacionCSVButton");
+    exportEvaluacionPreviaAplicacionButton.addEventListener("click", exportEvaluacionPreviaAplicacionCSV);
 
-  const exportEvaluacionesInterbloqueButton = document.getElementById("exportEvaluacionesInterbloqueButton");
-  exportEvaluacionesInterbloqueButton.addEventListener("click", exportEvaluacionesInterbloqueCSV);
+    const exportEvaluacionesInterbloqueButton = document.getElementById("exportEvaluacionesInterbloqueButton");
+    exportEvaluacionesInterbloqueButton.addEventListener("click", exportEvaluacionesInterbloqueCSV);
 
-  function exportAllDataAsCSV() {
-    exportToCSV();
-    /* exportWebUsersCSV();
-    exportAppUsersCSV();
-    exportAppUsersEvPrevCSV();
-    exportEvaluacionPreviaPaginaCSV();
-    exportEvaluacionPreviaAplicacionCSV();
-    exportEvaluacionesInterbloqueCSV(); */
-  }
-
-  function exportWebUsersCSV() {
-    const webUsersContainer = document.getElementById("allUsersInfo");
-    const csvContent = generateCSV(webUsersContainer);
-    downloadCSV(csvContent, "UsuariosPagina.csv");
-  }
-
-
-
-
-  async function exportToCSV() {
-    const collectionRef = db.collection('pre');
-    const snapshot = await collectionRef.get();
-  
-    const users = [];
-  
-    snapshot.forEach((doc) => {
-      const data = doc.data();
-      // Verifica si existen los campos 'puntuacionTotalBAI', 'puntuacionTotalBDI', y 'puntuacionTotalICSP'
-      if (
-        data.puntuacionTotalBAI !== undefined &&
-        data.puntuacionTotalBDI !== undefined &&
-        data.puntuacionTotalICSP !== undefined &&
-        data.puntuacionTotalMINI !== undefined &&
-        data.puntuacionTotalPSS !== undefined &&
-        data.puntuacionTotalWBI !== undefined 
-      ) {
-        users.push({
-          id: doc.id,
-          puntuacionTotalBAI: data.puntuacionTotalBAI,
-          puntuacionTotalBDI: data.puntuacionTotalBDI,
-          puntuacionTotalICSP: data.puntuacionTotalICSP,
-          puntuacionTotalMINI: data.puntuacionTotalMINI,
-          puntuacionTotalPSS: data.puntuacionTotalPSS,
-          puntuacionTotalWBI: data.puntuacionTotalWBI,
-        });
-      }
-    });
-  
-    if (users.length > 0) {
-      const csvWriterInstance = csvWriter({
-        path: 'usuarios.csv',
-        header: [
-          { id: 'id', title: 'ID' },
-          { id: 'puntuacionTotalBAI', title: 'Puntuacion Total BAI' },
-          { id: 'puntuacionTotalBDI', title: 'Puntuacion Total BDI' },
-          { id: 'puntuacionTotalICSP', title: 'Puntuacion Total ICSP' },
-          { id: 'puntuacionTotalMINI', title: 'Puntuacion Total MINI' },
-          { id: 'puntuacionTotalPSS', title: 'Puntuacion Total PSS' },
-          { id: 'puntuacionTotalWBI', title: 'Puntuacion Total WBI' },
-        ],
-      });
-  
-      await csvWriterInstance.writeRecords(users);
-      console.log('Datos exportados exitosamente a usuarios.csv');
-    } else {
-      console.log('No se encontraron documentos con los campos requeridos.');
+    function exportAllDataAsCSV() {
+        exportToCSV();
+        /* exportWebUsersCSV();
+        exportAppUsersCSV();
+        exportAppUsersEvPrevCSV();
+        exportEvaluacionPreviaPaginaCSV();
+        exportEvaluacionPreviaAplicacionCSV();
+        exportEvaluacionesInterbloqueCSV(); */
     }
-  }
-  
-  exportToCSV().catch((error) => {
-    console.error('Error al exportar datos: ', error);
-  });
+
+    function exportWebUsersCSV() {
+        const webUsersContainer = document.getElementById("allUsersInfo");
+        const csvContent = generateCSV(webUsersContainer);
+        downloadCSV(csvContent, "UsuariosPagina.csv");
+    }
 
 
 
 
+    async function exportToCSV() {
+        const collectionRef = db.collection('pre');
+        const snapshot = await collectionRef.get();
 
+        const users = [];
 
+        snapshot.forEach((doc) => {
+            const data = doc.data();
+            // Verifica si existen los campos 'puntuacionTotalBAI', 'puntuacionTotalBDI', y 'puntuacionTotalICSP'
+            if (
+                data.puntuacionTotalBAI !== undefined &&
+                data.puntuacionTotalBDI !== undefined &&
+                data.puntuacionTotalICSP !== undefined &&
+                data.puntuacionTotalMINI !== undefined &&
+                data.puntuacionTotalPSS !== undefined &&
+                data.puntuacionTotalWBI !== undefined
+            ) {
+                users.push({
+                    id: doc.id,
+                    puntuacionTotalBAI: data.puntuacionTotalBAI,
+                    puntuacionTotalBDI: data.puntuacionTotalBDI,
+                    puntuacionTotalICSP: data.puntuacionTotalICSP,
+                    puntuacionTotalMINI: data.puntuacionTotalMINI,
+                    puntuacionTotalPSS: data.puntuacionTotalPSS,
+                    puntuacionTotalWBI: data.puntuacionTotalWBI,
+                });
+            }
+        });
 
+        if (users.length > 0) {
+            let csvContent = "ID,Puntuacion Total BAI,Puntuacion Total BDI,Puntuacion Total ICSP, Puntuacion Total MINI, Puntuacion Total PSS, Puntuacion Total WBI\n";
 
-  function exportAppUsersCSV() {
-    const appUsersContainer = document.getElementById("allUsersInfoAplicacion");
-    const csvContent = generateCSV(appUsersContainer);
-    downloadCSV(csvContent, "UsuariosAplicacion.csv");
-  }
+            users.forEach(user => {
+                csvContent += `${user.id},${user.puntuacionTotalBAI},${user.puntuacionTotalBDI},${user.puntuacionTotalICSP},${user.puntuacionTotalMINI},${user.puntuacionTotalPSS},${user.puntuacionTotalWBI}\n`;
+            });
 
-  function exportAppUsersEvPrevCSV() {
-    const appUsersContainer = document.getElementById("evaluacionPreviaInfo");
-    const csvContent = generateCSVWithEvalInfo(appUsersContainer);
-    downloadCSV(csvContent, "UsuariosEvaluacionPreviaRealizada.csv");
-  }
+            // Crear un enlace para descargar el CSV
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement("a");
+            link.setAttribute("href", url);
+            link.setAttribute("download", "preDatos.csv");
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        } else {
+            console.log('No se encontraron documentos con los campos requeridos.');
+        }
 
-  function exportEvaluacionPreviaPaginaCSV() {
-    const evaluacionPreviaContainer = document.getElementById("puntuacionesEvaluacionPrevia");
-    const csvContent = generateEvaluacionPreviaPaginaCSV(evaluacionPreviaContainer);
-    downloadCSV(csvContent, "PuntuacionesEvaluacionesPreviasPagina.csv");
-  }
+        /*if (users.length > 0) {
+          const csvWriterInstance = csvWriter({
+            path: 'usuarios.csv',
+            header: [
+              { id: 'id', title: 'ID' },
+              { id: 'puntuacionTotalBAI', title: 'Puntuacion Total BAI' },
+              { id: 'puntuacionTotalBDI', title: 'Puntuacion Total BDI' },
+              { id: 'puntuacionTotalICSP', title: 'Puntuacion Total ICSP' },
+              { id: 'puntuacionTotalMINI', title: 'Puntuacion Total MINI' },
+              { id: 'puntuacionTotalPSS', title: 'Puntuacion Total PSS' },
+              { id: 'puntuacionTotalWBI', title: 'Puntuacion Total WBI' },
+            ],
+          });
+      
+          await csvWriterInstance.writeRecords(users);
+          console.log('Datos exportados exitosamente a usuarios.csv');
+        } else {
+          console.log('No se encontraron documentos con los campos requeridos.');
+        }*/
+    }
 
-  function exportEvaluacionPreviaAplicacionCSV() {
-    const evaluacionPreviaAplicacionContainer = document.getElementById("puntuacionesEvaluacionPreviaAplicacion");
-    const csvContent = generateEvaluacionPreviaAplicacionCSV(evaluacionPreviaAplicacionContainer);
-    downloadCSV(csvContent, "PuntuacionesEvaluacionesPreviasAplicacion.csv");
-  }
-
-  function exportEvaluacionesInterbloqueCSV() {
-    const interbloqueContainer = document.getElementById("interbloqueInfoAplicacion");
-    const csvContent = generateInterbloqueCSV(interbloqueContainer);
-    downloadCSV(csvContent, "EvaluacionesInterbloque.csv");
-  }
-
-  function generateCSV(container) {
-    const rows = container.querySelectorAll(".usuario-info");
-    let csvContent = "data:text/csv;charset=utf-8,\uFEFF";
-
-    const firstUserFields = rows[0].querySelectorAll(".campo");
-    const fieldNames = Array.from(firstUserFields).map((field) => field.textContent.trim());
-    const fieldRowCSV = fieldNames
-      .map((field) => `"${field.replace(/"/g, '""')}"`)
-      .join(",");
-    csvContent += fieldRowCSV + "\r\n";
-
-    rows.forEach((row) => {
-      const fields = row.querySelectorAll(".valor");
-      const rowData = Array.from(fields).map((field) => field.textContent.trim());
-      const rowCSV = rowData
-        .map((field) => `"${field.replace(/"/g, '""')}"`)
-        .join(","); 
-      csvContent += rowCSV + "\r\n";
+    exportToCSV().catch((error) => {
+        console.error('Error al exportar datos: ', error);
     });
-    return csvContent;
-  }
 
-  function generateCSVWithEvalInfo(container) {
-    const rows = container.querySelectorAll(".usuario-row");
-    let csvContent = "data:text/csv;charset=utf-8,\uFEFF"; 
-    csvContent += '"ID del usuario","Evaluación Previa Realizada - No Realizada"\r\n';
 
-    rows.forEach((row) => {
-      const idUsuario = row.querySelector(".valor").textContent.trim();
-      const evaluacionPrevia = row
-        .querySelector(".valor:last-of-type")
-        .textContent.trim();
-      const rowData = `"${idUsuario.replace(
-        /"/g,
-        '""'
-      )}","${evaluacionPrevia.replace(/"/g, '""')}"`;
-      csvContent += rowData + "\r\n";
-    });
-    return csvContent;
-  }
 
-  function generateEvaluacionPreviaPaginaCSV(container) {
-    const usuariosEvaluacionPrevia = container.querySelectorAll(".usuario-evaluacion-previa");
-    let csvContent = "data:text/csv;charset=utf-8,\uFEFF"; 
 
-    const firstUserFields = usuariosEvaluacionPrevia[0].querySelectorAll(".campo");
-    const fieldNames = Array.from(firstUserFields).map((field) => field.textContent.trim());
-    const fieldRowCSV = fieldNames
-      .map((field) => `"${field.replace(/"/g, '""')}"`)
-      .join(",");
 
-    csvContent += fieldRowCSV + "\r\n";
 
-    usuariosEvaluacionPrevia.forEach((usuario) => {
-      const fields = usuario.querySelectorAll(".valor");
-      const rowData = Array.from(fields).map((field) => field.textContent.trim());
-      const rowCSV = rowData
-        .map((field) => `"${field.replace(/"/g, '""')}"`)
-        .join(",");
-      csvContent += rowCSV + "\r\n";
-    });
-    return csvContent;
-  }
 
-  function generateEvaluacionPreviaAplicacionCSV(container) {
-    const usuariosEvaluacionPrevia = container.querySelectorAll(".usuario-evaluacion-previa");
-    let csvContent = "data:text/csv;charset=utf-8,\uFEFF";
-    const firstUserFields = usuariosEvaluacionPrevia[0].querySelectorAll(".campo");
-    const fieldNames = Array.from(firstUserFields).map((field) => field.textContent.trim());
-    const fieldRowCSV = fieldNames
-      .map((field) => `"${field.replace(/"/g, '""')}"`)
-      .join(",");
-    csvContent += fieldRowCSV + "\r\n";
 
-    usuariosEvaluacionPrevia.forEach((usuario) => {
-      const fields = usuario.querySelectorAll(".valor");
-      const rowData = Array.from(fields).map((field) => field.textContent.trim());
-      const rowCSV = rowData
-        .map((field) => `"${field.replace(/"/g, '""')}"`)
-        .join(",");
-      csvContent += rowCSV + "\r\n";
-    });
-    return csvContent;
-  }
-  
-  function generateInterbloqueCSV(container) {
-    let csvContent = "data:text/csv;charset=utf-8,\uFEFF";
-    const interbloqueSections = container.querySelectorAll(".interbloque-section");
+    function exportAppUsersCSV() {
+        const appUsersContainer = document.getElementById("allUsersInfoAplicacion");
+        const csvContent = generateCSV(appUsersContainer);
+        downloadCSV(csvContent, "UsuariosAplicacion.csv");
+    }
 
-    interbloqueSections.forEach((section) => {
-      const evaluacionTitulo = section.querySelector("h3").textContent.trim();
-      csvContent += `"${evaluacionTitulo}"\r\n`;
-      csvContent += "\"ID del usuario\",\"Sentimiento\"\r\n";
+    function exportAppUsersEvPrevCSV() {
+        const appUsersContainer = document.getElementById("evaluacionPreviaInfo");
+        const csvContent = generateCSVWithEvalInfo(appUsersContainer);
+        downloadCSV(csvContent, "UsuariosEvaluacionPreviaRealizada.csv");
+    }
 
-      const usuariosEvaluacion = section.querySelectorAll(".usuario-evaluacion-previa");
-      usuariosEvaluacion.forEach((usuario) => {
-        const idUsuarioRow = usuario.querySelector(".usuario-row:first-child .valor");
-        const idUsuario = idUsuarioRow ? idUsuarioRow.textContent.trim() : "";
-        const sentimientoRow = usuario.querySelector(".usuario-row:last-child .valor");
-        const sentimiento = sentimientoRow ? sentimientoRow.textContent.trim() : "";
-        const rowData = `"${idUsuario.replace(/"/g, '""')}","${sentimiento.replace(/"/g, '""')}"\r\n`;
-        csvContent += rowData;
-      });
-      csvContent += "\r\n";
-    });
-    return csvContent;
-  }
+    function exportEvaluacionPreviaPaginaCSV() {
+        const evaluacionPreviaContainer = document.getElementById("puntuacionesEvaluacionPrevia");
+        const csvContent = generateEvaluacionPreviaPaginaCSV(evaluacionPreviaContainer);
+        downloadCSV(csvContent, "PuntuacionesEvaluacionesPreviasPagina.csv");
+    }
 
-  function downloadCSV(csvContent, filename) {
-    const encodedUri = encodeURI(csvContent);
-    const link = document.createElement("a");
-    link.setAttribute("href", encodedUri);
-    link.setAttribute("download", filename);
-    document.body.appendChild(link);
-    link.click();
-  }
+    function exportEvaluacionPreviaAplicacionCSV() {
+        const evaluacionPreviaAplicacionContainer = document.getElementById("puntuacionesEvaluacionPreviaAplicacion");
+        const csvContent = generateEvaluacionPreviaAplicacionCSV(evaluacionPreviaAplicacionContainer);
+        downloadCSV(csvContent, "PuntuacionesEvaluacionesPreviasAplicacion.csv");
+    }
+
+    function exportEvaluacionesInterbloqueCSV() {
+        const interbloqueContainer = document.getElementById("interbloqueInfoAplicacion");
+        const csvContent = generateInterbloqueCSV(interbloqueContainer);
+        downloadCSV(csvContent, "EvaluacionesInterbloque.csv");
+    }
+
+    function generateCSV(container) {
+        const rows = container.querySelectorAll(".usuario-info");
+        let csvContent = "data:text/csv;charset=utf-8,\uFEFF";
+
+        const firstUserFields = rows[0].querySelectorAll(".campo");
+        const fieldNames = Array.from(firstUserFields).map((field) => field.textContent.trim());
+        const fieldRowCSV = fieldNames
+            .map((field) => `"${field.replace(/"/g, '""')}"`)
+            .join(",");
+        csvContent += fieldRowCSV + "\r\n";
+
+        rows.forEach((row) => {
+            const fields = row.querySelectorAll(".valor");
+            const rowData = Array.from(fields).map((field) => field.textContent.trim());
+            const rowCSV = rowData
+                .map((field) => `"${field.replace(/"/g, '""')}"`)
+                .join(",");
+            csvContent += rowCSV + "\r\n";
+        });
+        return csvContent;
+    }
+
+    function generateCSVWithEvalInfo(container) {
+        const rows = container.querySelectorAll(".usuario-row");
+        let csvContent = "data:text/csv;charset=utf-8,\uFEFF";
+        csvContent += '"ID del usuario","Evaluación Previa Realizada - No Realizada"\r\n';
+
+        rows.forEach((row) => {
+            const idUsuario = row.querySelector(".valor").textContent.trim();
+            const evaluacionPrevia = row
+                .querySelector(".valor:last-of-type")
+                .textContent.trim();
+            const rowData = `"${idUsuario.replace(
+                /"/g,
+                '""'
+            )}","${evaluacionPrevia.replace(/"/g, '""')}"`;
+            csvContent += rowData + "\r\n";
+        });
+        return csvContent;
+    }
+
+    function generateEvaluacionPreviaPaginaCSV(container) {
+        const usuariosEvaluacionPrevia = container.querySelectorAll(".usuario-evaluacion-previa");
+        let csvContent = "data:text/csv;charset=utf-8,\uFEFF";
+
+        const firstUserFields = usuariosEvaluacionPrevia[0].querySelectorAll(".campo");
+        const fieldNames = Array.from(firstUserFields).map((field) => field.textContent.trim());
+        const fieldRowCSV = fieldNames
+            .map((field) => `"${field.replace(/"/g, '""')}"`)
+            .join(",");
+
+        csvContent += fieldRowCSV + "\r\n";
+
+        usuariosEvaluacionPrevia.forEach((usuario) => {
+            const fields = usuario.querySelectorAll(".valor");
+            const rowData = Array.from(fields).map((field) => field.textContent.trim());
+            const rowCSV = rowData
+                .map((field) => `"${field.replace(/"/g, '""')}"`)
+                .join(",");
+            csvContent += rowCSV + "\r\n";
+        });
+        return csvContent;
+    }
+
+    function generateEvaluacionPreviaAplicacionCSV(container) {
+        const usuariosEvaluacionPrevia = container.querySelectorAll(".usuario-evaluacion-previa");
+        let csvContent = "data:text/csv;charset=utf-8,\uFEFF";
+        const firstUserFields = usuariosEvaluacionPrevia[0].querySelectorAll(".campo");
+        const fieldNames = Array.from(firstUserFields).map((field) => field.textContent.trim());
+        const fieldRowCSV = fieldNames
+            .map((field) => `"${field.replace(/"/g, '""')}"`)
+            .join(",");
+        csvContent += fieldRowCSV + "\r\n";
+
+        usuariosEvaluacionPrevia.forEach((usuario) => {
+            const fields = usuario.querySelectorAll(".valor");
+            const rowData = Array.from(fields).map((field) => field.textContent.trim());
+            const rowCSV = rowData
+                .map((field) => `"${field.replace(/"/g, '""')}"`)
+                .join(",");
+            csvContent += rowCSV + "\r\n";
+        });
+        return csvContent;
+    }
+
+    function generateInterbloqueCSV(container) {
+        let csvContent = "data:text/csv;charset=utf-8,\uFEFF";
+        const interbloqueSections = container.querySelectorAll(".interbloque-section");
+
+        interbloqueSections.forEach((section) => {
+            const evaluacionTitulo = section.querySelector("h3").textContent.trim();
+            csvContent += `"${evaluacionTitulo}"\r\n`;
+            csvContent += "\"ID del usuario\",\"Sentimiento\"\r\n";
+
+            const usuariosEvaluacion = section.querySelectorAll(".usuario-evaluacion-previa");
+            usuariosEvaluacion.forEach((usuario) => {
+                const idUsuarioRow = usuario.querySelector(".usuario-row:first-child .valor");
+                const idUsuario = idUsuarioRow ? idUsuarioRow.textContent.trim() : "";
+                const sentimientoRow = usuario.querySelector(".usuario-row:last-child .valor");
+                const sentimiento = sentimientoRow ? sentimientoRow.textContent.trim() : "";
+                const rowData = `"${idUsuario.replace(/"/g, '""')}","${sentimiento.replace(/"/g, '""')}"\r\n`;
+                csvContent += rowData;
+            });
+            csvContent += "\r\n";
+        });
+        return csvContent;
+    }
+
+    function downloadCSV(csvContent, filename) {
+        const encodedUri = encodeURI(csvContent);
+        const link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", filename);
+        document.body.appendChild(link);
+        link.click();
+    }
 });
