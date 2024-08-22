@@ -357,7 +357,7 @@ function createParagraph(html) {
     return p;
 }
 
-document.addEventListener("DOMContentLoaded", obtenerUsuariosInfo);
+//document.addEventListener("DOMContentLoaded", obtenerUsuariosInfo);
 
 document.addEventListener("DOMContentLoaded", function () {
     const exportWebUsersButton = document.getElementById("exportUsersPaginaCSVButton");
@@ -401,8 +401,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     async function exportToCSV() {
-        const collectionRef = db.collection('pre');
-        const snapshot = await collectionRef.get();
+        const collectionRef = collection(db,'pre');
+        //const snapshot = await collectionRef.get();
+        const snapshot = await getDocs(collectionRef);
 
         const users = [];
 
